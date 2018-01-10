@@ -1,4 +1,4 @@
-# Requires admin permissions
+#Assumes that script is being ran with admin rights
 param(
     [Parameter(Mandatory=$True)]
     [string]$serviceName
@@ -18,8 +18,9 @@ else {
     Write-Output "Attempting to delete the '$serviceName' service"
     $result = $service.delete()
     if ($result.ReturnValue -ne 0){
-        Write-Output "Failed to delete the '$serviceName' service with an error code of $($result.ReturnValue)"
-        Write-Output "Please refer to https://msdn.microsoft.com/en-us/library/aa389960(v=vs.85).aspx for more information on the error code"
+        $errorMessage = "Failed to delete the '$serviceName' service with an error code of $($result.ReturnValue).`n"
+        $helpMessage = "Please refer to https://msdn.microsoft.com/en-us/library/aa389960(v=vs.85).aspx for more information on the error code" 
+        throw ($errorMessage + $helpMessage)
     }
     else{
         Write-Output "Successfully deleted the '$serviceName' service"
